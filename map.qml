@@ -117,7 +117,43 @@ import QtPositioning 6.5
 
 
 
-import QtLocation 5.6
+// import QtLocation 5.6
+
+// Item {
+//     width: 800
+//     height: 600
+
+//     Plugin {
+//         id: mapPlugin
+//         name: "osm"
+//     }
+
+//     Map {
+//         id: map
+//         anchors.fill: parent
+//         plugin: mapPlugin
+//         center: QtPositioning.coordinate(37.7749, -122.4194) // Initial map center (San Francisco)
+//         zoomLevel: 20
+//     }
+
+//     Rectangle {
+//         width: map.width/3
+//         height: map.height/3
+
+//     // Create marker
+//     MapQuickItem {
+//         anchorPoint.x: 0.5
+//         anchorPoint.y: 0.5
+//         coordinate: QtPositioning.coordinate(37.7749, -122.4194) // Marker position (San Francisco)
+//         sourceItem: Rectangle {
+//             width: 10
+//             height: 10
+//             color: "red" // Set the color of the marker
+//         }
+//     }
+
+// }
+
 
 Item {
     width: 800
@@ -125,31 +161,65 @@ Item {
 
     Plugin {
         id: mapPlugin
-        name: "osm"
+        name: "googlemaps"
+        PluginParameter { name: "API key 1"; value: "AIzaSyAh5r2uQ_j1hylcUNkDOWc1imCRh7fPCgg" }
     }
 
     Map {
         id: map
         anchors.fill: parent
         plugin: mapPlugin
-        center: QtPositioning.coordinate(37.7749, -122.4194) // Initial map center (San Francisco)
-        zoomLevel: 20
-    }
+        center: QtPositioning.coordinate(35.73661, 51.29013) // Initial center
 
-    // Rectangle {
-    //     width: map.width/3
-    //     height: map.height/3
+        // Zoom level can be adjusted as needed
+        zoomLevel: 10 // Adjust the zoom level according to your preference
 
-    // Create marker
-    MapQuickItem {
-        anchorPoint.x: 0.5
-        anchorPoint.y: 0.5
-        coordinate: QtPositioning.coordinate(37.7749, -122.4194) // Marker position (San Francisco)
-        sourceItem: Rectangle {
-            width: 10
-            height: 10
-            color: "red" // Set the color of the marker
+        MapItemView {
+            model: ListModel {
+                id: markerModel
+            }
+
+
+
+            // Create marker
+            MapQuickItem {
+                anchorPoint.x: 0.5
+                anchorPoint.y: 0.5
+                coordinate: QtPositioning.coordinate(37.7749, -122.4194) // Marker position (San Francisco)
+                sourceItem: Rectangle {
+                    width: 10
+                    height: 10
+                    color: "red" // Set the color of the marker
+                }
+            }
+
+            // delegate: MapQuickItem {
+            //     anchorPoint.x: image.width / 2
+            //     anchorPoint.y: image.height
+
+            //     sourceItem: Item {
+            //         width: 64
+            //         height: 64
+
+            //         Image {
+            //             id: image
+            //             source: "marker.png" // Add your marker image here
+            //         }
+            //     }
+
+            //     coordinate: QtPositioning.coordinate(model.latitude, model.longitude)
+            // }
         }
     }
 
+    Component.onCompleted: {
+        // for (var i = 0; i < LatList.length; i++) {
+        //     markerModel.append({ latitude: LatList[i], longitude: LongList[i] });
+        // }
+    }
 }
+
+
+
+
+
