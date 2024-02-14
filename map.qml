@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtLocation 6.6
 import QtPositioning 6.5
-
+import QtQuick.Controls 2.15
 
 // Rectangle{
 //     id: rect
@@ -159,6 +159,10 @@ Item {
     width: 800
     height: 600
 
+    // Define LatList and LongList as properties
+    property variant latList
+    property variant longList
+
     Plugin {
         id: mapPlugin
         name: "googlemaps"
@@ -172,7 +176,14 @@ Item {
         center: QtPositioning.coordinate(35.73661, 51.29013) // Initial center
 
         // Zoom level can be adjusted as needed
-        zoomLevel: 10 // Adjust the zoom level according to your preference
+        zoomLevel: 15 // Adjust the zoom level according to your preference
+
+        Component.onCompleted: {
+            // Access latList and longList here and append markers
+            for (var i = 0; i < latList.length; i++) {
+                markerModel.append({ latitude: latList[i], longitude: longList[i] });
+            }
+        }
 
         MapItemView {
             model: ListModel {
@@ -181,41 +192,51 @@ Item {
 
 
 
-            // Create marker
-            MapQuickItem {
+            delegate: MapQuickItem {
                 anchorPoint.x: 0.5
                 anchorPoint.y: 0.5
-                coordinate: QtPositioning.coordinate(37.7749, -122.4194) // Marker position (San Francisco)
+                coordinate: QtPositioning.coordinate(model.latitude, model.longitude)
                 sourceItem: Rectangle {
                     width: 10
                     height: 10
-                    color: "red" // Set the color of the marker
+                    color: "red"
                 }
             }
 
-            // delegate: MapQuickItem {
-            //     anchorPoint.x: image.width / 2
-            //     anchorPoint.y: image.height
-
-            //     sourceItem: Item {
-            //         width: 64
-            //         height: 64
-
-            //         Image {
-            //             id: image
-            //             source: "marker.png" // Add your marker image here
-            //         }
+            // // Create marker
+            // MapQuickItem {
+            //     anchorPoint.x: 0.5
+            //     anchorPoint.y: 0.5
+            //     coordinate: QtPositioning.coordinate(35.73661, 51.29013) // Marker position (San Francisco)
+            //     sourceItem: Rectangle {
+            //         width: 10
+            //         height: 10
+            //         color: "red" // Set the color of the marker
             //     }
-
+            // }
             //     coordinate: QtPositioning.coordinate(model.latitude, model.longitude)
             // }
         }
     }
 
-    Component.onCompleted: {
-        // for (var i = 0; i < LatList.length; i++) {
-        //     markerModel.append({ latitude: LatList[i], longitude: LongList[i] });
-        // }
+
+    // Create ListView to display latitude and longitude values
+    ListView {
+        id: listView
+        anchors.left: parent.left
+        anchors.top: parent.top
+        width: 200
+        height: 400
+        model: longList // Use LongList as model
+
+        delegate: Item {
+            width: listView.width
+            height: 50
+            Text {
+                text: "Latitude: " + latList[index] + ", Longitude: " + modelData
+                anchors.centerIn: parent
+            }
+        }
     }
 }
 

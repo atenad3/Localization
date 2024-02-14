@@ -1,7 +1,5 @@
 #include "mainwindow.h"
-
 #include <QApplication>
-
 #include <QCoreApplication>
 #include <QtSql>
 #include <QDebug>
@@ -9,7 +7,9 @@
 #include <QSqlQuery>
 #include <QMessageBox>
 #include <QVector>
-
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 
 int main(int argc, char *argv[])
@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     db.setDatabaseName("test_cells");
     db.setUserName("atefe");
     db.setPassword("atefe1234");
+
 
     // Check if the connection is successful
     if (!db.open()) {
@@ -40,17 +41,17 @@ int main(int argc, char *argv[])
     }
     //
 
-    QVector<double> LatList;
-    QVector<double> LongList;
+    QVector<double> latList;
+    QVector<double> longList;
 
     // Process the result set
     while (query.next()) {
         // Retrieve and store the Node Id in the QVector
         double lat = query.value("Latitude").toDouble();
-        LatList.append(lat);
+        latList.append(lat);
 
         double lng = query.value("Longitude").toDouble();
-        LongList.append(lng);
+        longList.append(lng);
 
         // Print the contents of the list
         qDebug() << "lng values:";
@@ -67,6 +68,21 @@ int main(int argc, char *argv[])
 
     // Close the database connection when done with database operations
     db.close();
+
+    // Create QML engine
+    QQmlApplicationEngine engine;
+
+    // Expose LatList and LongList to QML
+    engine.rootContext()->setContextProperty("latList", QVariant::fromValue(latList));
+    engine.rootContext()->setContextProperty("longList", QVariant::fromValue(longList));
+
+    // Load the QML file
+    engine.load(QUrl(QStringLiteral("qrc:/map.qml")));
+
+    if (engine.rootObjects().isEmpty())
+        return -1;
+
+
 
     MainWindow w;
     w.show();
