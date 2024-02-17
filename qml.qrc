@@ -1,6 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>map.qml</file>
+        <file>ui/BottomBar/BottomBar.qml</file>
+        <file>ui/RightScreen/RightScreen.qml</file>
     </qresource>
     <qresource prefix="/resources">
         <file>img/marker.jpg</file>
