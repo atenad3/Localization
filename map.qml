@@ -4,6 +4,8 @@ import QtQuick.Controls 2.15
 import QtQuick.Controls 2.2 as Modern
 import MyTypes 1.0
 import QtQuick
+
+
 // import Monty 1.0
 // import QtLocation
 // import QtPositioning
@@ -245,6 +247,7 @@ import QtQuick
 
 import "ui/BottomBar"
 import "ui/RightScreen"
+import "ui/LeftScreen"
 
 Rectangle {
     Window {
@@ -252,6 +255,11 @@ Rectangle {
         height: 720
         visible: true
         title: qsTr("test ..")
+
+        LeftScreen{
+            id: leftScreen
+        }
+
 
         RightScreen{
             id: rightScreen
