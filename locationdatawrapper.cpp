@@ -42,6 +42,10 @@ void LocationDataWrapper::fetchDataFromDatabase()
 
     }
 
+    QVector<double> latList;
+    QVector<double> longList;
+
+
 
     while (query.next()) {
 

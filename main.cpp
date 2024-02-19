@@ -13,38 +13,80 @@
 #include <QQmlApplicationEngine>
 #include "locationdatawrapper.h"
 #include <QQmlContext>
+#include <Controllers/system.h>
+#include <QQmlContext>
+#include <QGuiApplication>
 
 int main(int argc, char *argv[])
 {
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
     QApplication a(argc, argv);
-
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName("localhost");
-    db.setDatabaseName("test_cells");
-    db.setUserName("atefe");
-    db.setPassword("atefe1234");
-
     QQmlApplicationEngine engine;
+    System m_systemHandler;
 
-    // Check if the connection is successful
-    if (!db.open()) {
-        qDebug() << "Failed to connect to the database:" << db.lastError().text();
-        return -1;
-    }
+    // QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    // db.setHostName("localhost");
+    // db.setDatabaseName("test_cells");
+    // db.setUserName("atefe");
+    // db.setPassword("atefe1234");
 
-    qDebug() << "Connected to the database";
+
+
+    const QUrl url(QStringLiteral("qrc:/map.qml"));
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &a, [url](QObject *obj, const QUrl &objUrl) {
+            if (!obj && url == objUrl)
+                QCoreApplication::exit(-1);
+    }, Qt::QueuedConnection);
+
+
+
+    // Expose the instance to QML
+    // engine.rootContext()->setContextProperty("systemHandler", &m_systemHandler);
+
+
+    // QQmlContext * context(engine.rootContext());
+    QQmlContext * context = engine.rootContext();
+    context->setContextProperty("systemHandler", &m_systemHandler); //appropriate name to expose your C++ object,You've provided a valid pointer to your C++ object when calling setContextProperty
+    context->setContextProperty("appdir", QApplication::applicationDirPath());
+
+    engine.load(url);
+
+    // // Check if the connection is successful
+    // if (!db.open()) {
+    //     qDebug() << "Failed to connect to the database:" << db.lastError().text();
+    //     return -1;
+    // }
+
+    // qDebug() << "Connected to the database";
+    // db.close();
+
+
+
 
     // Create and populate the location data wrapper
-    LocationDataWrapper locationDataWrapper;
-    locationDataWrapper.fetchDataFromDatabase();
 
 
-    // Register LocationDataWrapper as a QML type
-    qmlRegisterType<LocationDataWrapper>("MyTypes", 1, 0, "LocationDataWrapper");
 
-    // QQmlApplicationEngine engine;
-    engine.rootContext()->setContextProperty("locationData", &locationDataWrapper);
-    engine.load(QUrl(QStringLiteral("qrc:/map.qml")));
+
+
+    // LocationDataWrapper locationDataWrapper;
+    // locationDataWrapper.fetchDataFromDatabase();
+
+
+    // // Register LocationDataWrapper as a QML type
+    // qmlRegisterType<LocationDataWrapper>("MyTypes", 1, 0, "LocationDataWrapper");
+
+    // // QQmlApplicationEngine engine;
+    // engine.rootContext()->setContextProperty("locationData", &locationDataWrapper);
+    // engine.load(QUrl(QStringLiteral("qrc:/map.qml")));
+
+
+
+
+
+
+
 
     // Use the connection for database operations
     // QSqlQuery query;
@@ -52,7 +94,6 @@ int main(int argc, char *argv[])
     // QVector<double> longList;
 
     // Close the database connection when done with database operations
-    db.close();
 
     // Expose LatList and LongList to QML
     // QQmlApplicationEngine engine;
@@ -65,8 +106,12 @@ int main(int argc, char *argv[])
 
 
 
-    if (engine.rootObjects().isEmpty())
+
+
+    if (engine.rootObjects().isEmpty()){
+        qDebug() << "no";
         return -1;
+    }
 
     MainWindow w;
     w.show();

@@ -2,7 +2,7 @@ import QtLocation
 import QtPositioning
 import QtQuick.Controls 2.15
 import QtQuick.Controls 2.2 as Modern
-import MyTypes 1.0
+// import MyTypes 1.0
 import QtQuick
 
 
@@ -393,16 +393,16 @@ Rectangle {
                 // coordinate: QtPositioning.coordinate(35.73661, 51.29013)
         }
 
-        MapPolyline {
-            line.width: 3
-            line.color: 'green'
-            path: [
-                { latitude: 35.73661, longitude: 51.29013 },
-                { latitude: 35.73662, longitude: 51.29013 },
-                { latitude: 35.73663, longitude: 51.29013 },
-                { latitude: 35.73664, longitude: 51.29013 }
-            ]
-        }
+        // MapPolyline {
+        //     line.width: 3
+        //     line.color: 'green'
+        //     path: [
+        //         { latitude: 35.73661, longitude: 51.29013 },
+        //         { latitude: 35.73662, longitude: 51.29013 },
+        //         { latitude: 35.73663, longitude: 51.29013 },
+        //         { latitude: 35.73664, longitude: 51.29013 }
+        //     ]
+        // }
 
         // Component.onCompleted: {
         //     // Access latList and longList here and append markers
@@ -413,9 +413,9 @@ Rectangle {
     }
 
 
-    LocationDataWrapper {
-            id: locationData
-        }
+    // LocationDataWrapper {
+    //         id: locationData
+    //     }
 
         // ListView {
         //     width: parent.width
@@ -444,19 +444,19 @@ Rectangle {
 
 
     // ListView to display latitude and longitude
-    ListView {
-        width: 200
-        height: 400
-        model: locationDataWrapper.latitudeList.length > 0 ? locationDataWrapper.latitudeList : ListModel  // Check if data is available
-        delegate: Item {
-            width: parent.width
-            height: 40
-            Text {
-                anchors.centerIn: parent
-                text: "Latitude: " + modelData + ", Longitude: " + locationDataWrapper.longitudeList[index]
-            }
-        }
-    }
+    // ListView {
+    //     width: 200
+    //     height: 400
+    //     model: locationDataWrapper.latitudeList.length > 0 ? locationDataWrapper.latitudeList : ListModel  // Check if data is available
+    //     delegate: Item {
+    //         width: parent.width
+    //         height: 40
+    //         Text {
+    //             anchors.centerIn: parent
+    //             text: "Latitude: " + modelData + ", Longitude: " + locationDataWrapper.longitudeList[index]
+    //         }
+    //     }
+    // }
 
 
 
@@ -529,9 +529,35 @@ Rectangle {
     }
 
     Modern.Button {
-    x: 270
-    y: 208
-    text: 'Modern Button'
+        x: 0
+        y: 208*2
+        id: botton
+        text:"Click to add gnode id"
+        onClicked: {
+            // Use a JavaScript function with formal parameters
+            console.log("button clicked at coordinates:");
+            systemHandler.callMe()
+        }
+
     }
+
+
+    function handleButtonClickID(mouseX, mouseY) {
+            // Check if the right mouse button was clicked
+            if (Qt.mouseButtons === Qt.RightButton) {
+                // Print a sentence
+                console.log("Right mouse button clicked at coordinates:");
+
+                // Append data to the model
+                dummyModel.append({
+                    "Latitude": map.toCoordinate(Qt.point(mouseX, mouseY)).latitude,
+                    "Longitude": map.toCoordinate(Qt.point(mouseX, mouseY)).longitude,
+                    "Label": "abc",
+                    "Color": "red",
+                    "Orientation": 3
+                });
+            }
+        }
+
 
 }

@@ -3,7 +3,7 @@ import QtLocation
 import QtPositioning
 import QtQuick.Controls 2.15
 import QtQuick.Controls 2.2 as Modern
-import MyTypes 1.0
+// import MyTypes 1.0
 import QtQuick
 
 
