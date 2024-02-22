@@ -17,12 +17,16 @@ SOURCES += \
     locationdatawrapper.cpp \
     main.cpp \
     mainwindow.cpp \
+    map.cpp \
+    mymodel.cpp \
     test.cpp
 
 HEADERS += \
     Controllers/system.h \
     locationdatawrapper.h \
     mainwindow.h \
+    map.h \
+    mymodel.h \
     test.h
 
 FORMS += \

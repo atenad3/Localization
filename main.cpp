@@ -16,6 +16,11 @@
 #include <Controllers/system.h>
 #include <QQmlContext>
 #include <QGuiApplication>
+#include <QApplication>
+#include <QTableView>
+#include "mymodel.h"
+
+
 
 int main(int argc, char *argv[])
 {
@@ -25,11 +30,23 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     System m_systemHandler;
 
-    // QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    // db.setHostName("localhost");
-    // db.setDatabaseName("test_cells");
-    // db.setUserName("atefe");
-    // db.setPassword("atefe1234");
+    QTableView tableView;
+    // gridLayout = new QGridLayout(window);
+    MyModel myModel;
+    // to pass a pointer of it to tableView.
+    tableView.setModel(&myModel);
+    tableView.show();
+
+
+
+
+
+
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    db.setHostName("localhost");
+    db.setDatabaseName("test_cells");
+    db.setUserName("atefe");
+    db.setPassword("atefe1234");
 
 
 
@@ -47,19 +64,64 @@ int main(int argc, char *argv[])
 
     // QQmlContext * context(engine.rootContext());
     QQmlContext * context = engine.rootContext();
+
+    qmlRegisterType<System>("system", 1, 0, "System2");
     context->setContextProperty("systemHandler", &m_systemHandler); //appropriate name to expose your C++ object,You've provided a valid pointer to your C++ object when calling setContextProperty
     context->setContextProperty("appdir", QApplication::applicationDirPath());
 
     engine.load(url);
 
-    // // Check if the connection is successful
-    // if (!db.open()) {
-    //     qDebug() << "Failed to connect to the database:" << db.lastError().text();
-    //     return -1;
-    // }
+    // Check if the connection is successful
+    if (!db.open()) {
+        qDebug() << "Failed to connect to the database:" << db.lastError().text();
+        return -1;
+    }
 
-    // qDebug() << "Connected to the database";
-    // db.close();
+    qDebug() << "Connected to the database";
+
+    QSqlQuery query;
+    // Assuming db is your QSqlDatabase object and query is your QSqlQuery object
+    if (!query.exec("SELECT `Latitude`,`Longitude` FROM Drive_Test")) {
+
+        qDebug() << "Query Error:" << query.lastError().text();
+
+        // return;
+
+    }
+
+    QVector<double> latList;
+    QVector<double> longList;
+
+
+    while (query.next()) {
+
+        double lat = query.value("Latitude").toDouble();
+
+        latList.append(lat);
+        double lng = query.value("Longitude").toDouble();
+        longList.append(lng);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -112,6 +174,9 @@ int main(int argc, char *argv[])
         qDebug() << "no";
         return -1;
     }
+
+    db.close();
+
 
     MainWindow w;
     w.show();

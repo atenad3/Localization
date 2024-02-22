@@ -19,8 +19,6 @@ public:
     QVector<double> latlist() const;
     void setLatlist(const QVector<double> &newLatlist);
 
-    QString name = "test";
-
 
 signals:
     void longlistChanged();

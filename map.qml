@@ -248,6 +248,8 @@ import QtQuick
 import "ui/BottomBar"
 import "ui/RightScreen"
 import "ui/LeftScreen"
+import QtQuick.Layouts
+import system 1.0
 
 Rectangle {
     Window {
@@ -410,6 +412,25 @@ Rectangle {
         //         markerModel.append({ latitude: latList[i], longitude: longList[i] });
         //     }
         // }
+
+
+
+        Modern.Button {
+            x: 0
+            y: 208*2
+            id: botton
+            text:"Click to add gnode id"
+            System2{
+                id: reg_class
+            }
+            onClicked: {
+                // Use a JavaScript function with formal parameters
+                console.log("button clicked at coordinates:");
+                reg_class.callMe()
+            }
+
+        }
+
     }
 
 
@@ -479,6 +500,9 @@ Rectangle {
     //     }
     // }*/
 
+    Component.onCompleted: {
+        console.log(reg_class); // Print out the systemHandler object
+    }
 
 
     MouseArea {
@@ -528,18 +552,18 @@ Rectangle {
         }
     }
 
-    Modern.Button {
-        x: 0
-        y: 208*2
-        id: botton
-        text:"Click to add gnode id"
-        onClicked: {
-            // Use a JavaScript function with formal parameters
-            console.log("button clicked at coordinates:");
-            systemHandler.callMe()
-        }
+    // Modern.Button {
+    //     x: 0
+    //     y: 208*2
+    //     id: botton
+    //     text:"Click to add gnode id"
+    //     onClicked: {
+    //         // Use a JavaScript function with formal parameters
+    //         console.log("button clicked at coordinates:");
+    //         systemHandler.callMe()
+    //     }
 
-    }
+    // }
 
 
     function handleButtonClickID(mouseX, mouseY) {
