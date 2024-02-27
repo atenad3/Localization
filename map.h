@@ -1,18 +1,18 @@
-#ifndef MAP_H
-#define MAP_H
+// #ifndef MAP_H
+// #define MAP_H
 
-#include <QMainWindow>
+// #include <QMainWindow>
 
-class map: public QMainWindow
-{
-    Q_OBJECT
-public:
-    map();
+// class map: public QMainWindow
+// {
+//     Q_OBJECT
+// public:
+//     map();
 
-private:
-    QWidget *window = nullptr;
+// private:
+//     QWidget *window = nullptr;
 
 
-};
+// };
 
-#endif // MAP_H
+// #endif // MAP_H

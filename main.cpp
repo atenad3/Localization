@@ -39,88 +39,66 @@ int main(int argc, char *argv[])
 
 
 
+    // QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+    // db.setHostName("localhost");
+    // db.setDatabaseName("test_cells");
+    // db.setUserName("atefe");
+    // db.setPassword("atefe1234");
 
 
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName("localhost");
-    db.setDatabaseName("test_cells");
-    db.setUserName("atefe");
-    db.setPassword("atefe1234");
+    // const QUrl url(QStringLiteral("qrc:/map.qml"));
+    // QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &a, [url](QObject *obj, const QUrl &objUrl) {
+    //         if (!obj && url == objUrl)
+    //             QCoreApplication::exit(-1);
+    // }, Qt::QueuedConnection);
 
 
 
-    const QUrl url(QStringLiteral("qrc:/map.qml"));
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &a, [url](QObject *obj, const QUrl &objUrl) {
-            if (!obj && url == objUrl)
-                QCoreApplication::exit(-1);
-    }, Qt::QueuedConnection);
+    // // Expose the instance to QML
+    // // engine.rootContext()->setContextProperty("systemHandler", &m_systemHandler);
 
 
+    // // QQmlContext * context(engine.rootContext());
+    // QQmlContext * context = engine.rootContext();
 
-    // Expose the instance to QML
-    // engine.rootContext()->setContextProperty("systemHandler", &m_systemHandler);
+    // qmlRegisterType<System>("system", 1, 0, "System2");
+    // context->setContextProperty("systemHandler", &m_systemHandler); //appropriate name to expose your C++ object,You've provided a valid pointer to your C++ object when calling setContextProperty
+    // context->setContextProperty("appdir", QApplication::applicationDirPath());
 
+    // engine.load(url);
 
-    // QQmlContext * context(engine.rootContext());
-    QQmlContext * context = engine.rootContext();
+    // // Check if the connection is successful
+    // if (!db.open()) {
+    //     qDebug() << "Failed to connect to the database:" << db.lastError().text();
+    //     return -1;
+    // }
 
-    qmlRegisterType<System>("system", 1, 0, "System2");
-    context->setContextProperty("systemHandler", &m_systemHandler); //appropriate name to expose your C++ object,You've provided a valid pointer to your C++ object when calling setContextProperty
-    context->setContextProperty("appdir", QApplication::applicationDirPath());
+    // qDebug() << "Connected to the database";
 
-    engine.load(url);
+    // QSqlQuery query;
+    // // Assuming db is your QSqlDatabase object and query is your QSqlQuery object
+    // if (!query.exec("SELECT `Latitude`,`Longitude` FROM Drive_Test")) {
 
-    // Check if the connection is successful
-    if (!db.open()) {
-        qDebug() << "Failed to connect to the database:" << db.lastError().text();
-        return -1;
-    }
+    //     qDebug() << "Query Error:" << query.lastError().text();
 
-    qDebug() << "Connected to the database";
+    //     // return;
 
-    QSqlQuery query;
-    // Assuming db is your QSqlDatabase object and query is your QSqlQuery object
-    if (!query.exec("SELECT `Latitude`,`Longitude` FROM Drive_Test")) {
+    // }
 
-        qDebug() << "Query Error:" << query.lastError().text();
-
-        // return;
-
-    }
-
-    QVector<double> latList;
-    QVector<double> longList;
+    // QVector<double> latList;
+    // QVector<double> longList;
 
 
-    while (query.next()) {
+    // while (query.next()) {
 
-        double lat = query.value("Latitude").toDouble();
+    //     double lat = query.value("Latitude").toDouble();
 
-        latList.append(lat);
-        double lng = query.value("Longitude").toDouble();
-        longList.append(lng);
+    //     latList.append(lat);
+    //     double lng = query.value("Longitude").toDouble();
+    //     longList.append(lng);
 
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // }
 
 
 
@@ -170,12 +148,12 @@ int main(int argc, char *argv[])
 
 
 
-    if (engine.rootObjects().isEmpty()){
-        qDebug() << "no";
-        return -1;
-    }
+    // if (engine.rootObjects().isEmpty()){
+    //     qDebug() << "no";
+    //     return -1;
+    // }
 
-    db.close();
+    // db.close();
 
 
     MainWindow w;

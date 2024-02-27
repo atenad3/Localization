@@ -29,8 +29,7 @@ HEADERS += \
     mymodel.h \
     test.h
 
-FORMS += \
-    mainwindow.ui
+FORMS += mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

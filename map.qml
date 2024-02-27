@@ -249,9 +249,11 @@ import "ui/BottomBar"
 import "ui/RightScreen"
 import "ui/LeftScreen"
 import QtQuick.Layouts
-import system 1.0
+// import system 1.0
 
 Rectangle {
+    signal sampleSignal()
+    signal sampleSignal2()
     Window {
         width: 1280
         height: 720
@@ -393,7 +395,7 @@ Rectangle {
                 }
             }
                 // coordinate: QtPositioning.coordinate(35.73661, 51.29013)
-        }
+
 
         // MapPolyline {
         //     line.width: 3
@@ -415,23 +417,41 @@ Rectangle {
 
 
 
-        Modern.Button {
-            x: 0
-            y: 208*2
-            id: botton
-            text:"Click to add gnode id"
-            System2{
-                id: reg_class
-            }
-            onClicked: {
-                // Use a JavaScript function with formal parameters
-                console.log("button clicked at coordinates:");
-                reg_class.callMe()
-            }
+            Modern.Button {
+                x: 0
+                y: 208*2
+                id: botton
+                text:"Click to add gnode id"
+                // System2{
+                //     id: reg_class
+                // }
+                // onClicked: {
+                //     // Use a JavaScript function with formal parameters
+                //     console.log("button clicked at coordinates:");
+                //     reg_class.callMe()
+                // }
+                onClicked: {
+                    sampleSignal()
+                    sampleSignal2()
 
+                }
+            }
         }
 
-    }
+
+
+        Connections {
+                target: mapObj
+
+                function onSample_Sig(txt) {
+                    console.log("text is: ", txt)
+                }
+
+                function onMySignal() {
+                    console.log("name of first TestType in list: " + list[0]);
+                }
+        }
+
 
 
     // LocationDataWrapper {
@@ -500,9 +520,13 @@ Rectangle {
     //     }
     // }*/
 
-    Component.onCompleted: {
-        console.log(reg_class); // Print out the systemHandler object
-    }
+    // Component.onCompleted: {
+    //     console.log(reg_class); // Print out the systemHandler object
+    // }
+
+
+
+
 
 
     MouseArea {
@@ -515,25 +539,26 @@ Rectangle {
             handleRightButtonClick(mouseX, mouseY);
         }
 
-    }
+        function handleRightButtonClick(mouseX, mouseY) {
+            // Check if the right mouse button was clicked
+            if (Qt.mouseButtons === Qt.RightButton) {
+                // Print a sentence
+                console.log("Right mouse button clicked at coordinates:");
 
-
-    function handleRightButtonClick(mouseX, mouseY) {
-        // Check if the right mouse button was clicked
-        if (Qt.mouseButtons === Qt.RightButton) {
-            // Print a sentence
-            console.log("Right mouse button clicked at coordinates:");
-
-            // Append data to the model
-            dummyModel.append({
-                "Latitude": map.toCoordinate(Qt.point(mouseX, mouseY)).latitude,
-                "Longitude": map.toCoordinate(Qt.point(mouseX, mouseY)).longitude,
-                "Label": "abc",
-                "Color": "red",
-                "Orientation": 3
-            });
+                // Append data to the model
+                dummyModel.append({
+                    "Latitude": map.toCoordinate(Qt.point(mouseX, mouseY)).latitude,
+                    "Longitude": map.toCoordinate(Qt.point(mouseX, mouseY)).longitude,
+                    "Label": "abc",
+                    "Color": "red",
+                    "Orientation": 3
+                });
+            }
         }
+
     }
+
+
 
     Button{
         id:buttonMap
@@ -581,7 +606,8 @@ Rectangle {
                     "Orientation": 3
                 });
             }
-        }
+    }
 
 
+}
 }

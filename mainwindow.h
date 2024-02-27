@@ -17,11 +17,21 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void emitSig() { emit sample_Sig("sample signal"); }
+    void mySignal();
+
+public slots:
+    void receiveSignal();
+    void on_pushButton_clicked();
+
 
 private:
     Ui::MainWindow *ui;
 
+
 signals:
     void setCenter(QVariant, QVariant);
+    void sample_Sig(QString);
+    void mySignal(QVariantList list);
 };
 #endif // MAINWINDOW_H
