@@ -19,6 +19,7 @@ public:
     ~MainWindow();
     void emitSig() { emit sample_Sig("sample signal"); }
     void mySignal();
+     // { emit sample_Sig2(latList); }
 
 public slots:
     void receiveSignal();

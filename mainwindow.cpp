@@ -7,7 +7,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QDebug>
-
+#include <stdio.h>
 
 
 // #include <QtWebEngineWidgets/QWebEngineView>
@@ -103,8 +103,12 @@ void MainWindow::on_pushButton_clicked()
 
         double lng = query.value("Longitude").toDouble();
         longList.append(lng);
-        printf("salam");
+        // putc(longList, stdout);
 
+    }
+    for(int y=0; y<longList.size(); y++)
+    {
+        qDebug()<< QString("%1").arg(longList.at(y));
     }
     emitSig();
 
