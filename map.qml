@@ -95,25 +95,21 @@ Rectangle {
         }
 
 
-
-
+        // Define the model to hold coordinates
+        ListModel {
+            id: locationModel
+            ListElement { latitude: 35.73661; longitude: 51.29013 } // Example coordinates // Additional coordinates
+            // Add more ListElements for additional locations
+        }
 
         MapItemView {
-            model: ListModel {
-                id: markerModel
-            }
-
-        // MapItemView {
-        //     model: ListModel {
-        //         ListElement { coordinate: QtPositioning.coordinate(35.73661, 51.29013) }
-        //         // Add more ListElements for additional markers
-        //     }
+            model: locationModel
 
 
             delegate: MapQuickItem {
                 anchorPoint.x: 0.5
                 anchorPoint.y: 0.5
-                coordinate: QtPositioning.coordinate(35.73661, 51.29013)
+                coordinate: QtPositioning.coordinate(model.latitude, model.longitude)
                 sourceItem: Rectangle {
                     width: 10
                     height: 10
@@ -121,17 +117,11 @@ Rectangle {
                 }
             }
 
-            // Create marker
-            MapQuickItem {
-                anchorPoint.x: 0.5
-                anchorPoint.y: 0.5
-                coordinate: QtPositioning.coordinate(35.73661, 51.29013) // Marker position (San Francisco)
-                sourceItem: Rectangle {
-                    width: 10
-                    height: 10
-                    color: "red" // Set the color of the marker
-                }
-            }
+
+
+
+
+
                 // coordinate: QtPositioning.coordinate(35.73661, 51.29013)
 
             Modern.Button {
@@ -146,7 +136,7 @@ Rectangle {
 
                 }
             }
-        }
+
 
         Connections {
                 target: mapObj
@@ -154,21 +144,71 @@ Rectangle {
                 function onSample_Sig(txt) {
                     console.log("text is: ", txt)
                 }
-
-                // function onMySignal() {
-                //     console.log("name of first TestType in list: " + list[0]);
-                // }
         }
+
 
         Connections {
-                target: mapObj
-
-                function onMySignal(latList, longList){
-                    console.log("latList: ", latList)
-                    console.log("latList: ", longList)
+            target: mapObj
+            function onMySignal(latList, longList){
+                // Access latList and longList here and append markers
+                for (var i = 0; i < latList.length; i++) {
+                    // markerModel.append({ latitude: latList[i], longitude: longList[i] });
+                    // console.log("latList: ", latList[i])
+                    // console.log("longList: ", longList[i])
+                    locationModel.append({ latitude: latList[i], longitude: longList[i] });
                 }
+            }
         }
 
+        ListView {
+            anchors {
+                left: parent.left
+                top: parent.top
+                margins: 10
+            }
+            width: 200
+            height: 300
+            model: locationModel
+            delegate: Text {
+                text: "Latitude: " + model.latitude + ", Longitude: " + model.longitude
+            }
+        }
+
+
+        }
+        // // Create marker
+        // MapQuickItem {
+        //     model: locationModel
+        //     anchorPoint.x: 0.5
+        //     anchorPoint.y: 0.5
+        //     coordinate: QtPositioning.coordinate(35.73661, 51.29013) // Marker position (San Francisco)
+        //     sourceItem: Rectangle {
+        //         width: 10
+        //         height: 10
+        //         color: "red" // Set the color of the marker
+        //     }
+        // }
+
+        // Connections {
+        //     target: mapObj
+        //     function onMySignal(latList, longList) {
+        //         for (var i = 0; i < latList.length; i++) {
+        //             // Create marker for each latitude and longitude pair
+        //             MapQuickItem {
+        //                 anchorPoint.x: 0.5
+        //                 anchorPoint.y: 0.5
+        //                 coordinate: QtPositioning.coordinate(latList[i], longList[i])
+        //                 sourceItem: Rectangle {
+        //                     width: 10
+        //                     height: 10
+        //                     color: "red"
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+    }
 
 
     MouseArea {
@@ -250,5 +290,5 @@ Rectangle {
     }
 
 
-}
+
 }
