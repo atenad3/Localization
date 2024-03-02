@@ -18,12 +18,12 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void emitSig() { emit sample_Sig("sample signal"); }
-    void mySignal();
+    void emitMySignal();
      // { emit sample_Sig2(latList); }
 
 public slots:
     void receiveSignal();
-    void on_pushButton_clicked();
+    // void on_pushButton_clicked();
 
 
 private:
@@ -33,6 +33,6 @@ private:
 signals:
     void setCenter(QVariant, QVariant);
     void sample_Sig(QString);
-    void mySignal(QVariantList list);
+    void mySignal(QVector<double> ltList, QVector<double> lgList);
 };
 #endif // MAINWINDOW_H
