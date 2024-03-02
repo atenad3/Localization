@@ -105,25 +105,7 @@ Rectangle {
         MapItemView {
             model: locationModel
 
-
-            delegate: MapQuickItem {
-                anchorPoint.x: 0.5
-                anchorPoint.y: 0.5
-                coordinate: QtPositioning.coordinate(model.latitude, model.longitude)
-                sourceItem: Rectangle {
-                    width: 10
-                    height: 10
-                    color: "red"
-                }
-            }
-
-
-
-
-
-
-                // coordinate: QtPositioning.coordinate(35.73661, 51.29013)
-
+            // coordinate: QtPositioning.coordinate(35.73661, 51.29013)
             Modern.Button {
                 x: 0
                 y: 208*2
@@ -150,66 +132,40 @@ Rectangle {
         Connections {
             target: mapObj
             function onMySignal(latList, longList){
-                // Access latList and longList here and append markers
                 for (var i = 0; i < latList.length; i++) {
-                    // markerModel.append({ latitude: latList[i], longitude: longList[i] });
-                    // console.log("latList: ", latList[i])
-                    // console.log("longList: ", longList[i])
                     locationModel.append({ latitude: latList[i], longitude: longList[i] });
                 }
             }
         }
 
-        ListView {
-            anchors {
-                left: parent.left
-                top: parent.top
-                margins: 10
-            }
-            width: 200
-            height: 300
-            model: locationModel
-            delegate: Text {
-                text: "Latitude: " + model.latitude + ", Longitude: " + model.longitude
-            }
-        }
-
-
-        }
-        // // Create marker
-        // MapQuickItem {
+        // ListView {
+        //     anchors {
+        //         left: parent.left
+        //         top: parent.top
+        //         margins: 10
+        //     }
+        //     width: 200
+        //     height: 300
         //     model: locationModel
-        //     anchorPoint.x: 0.5
-        //     anchorPoint.y: 0.5
-        //     coordinate: QtPositioning.coordinate(35.73661, 51.29013) // Marker position (San Francisco)
-        //     sourceItem: Rectangle {
-        //         width: 10
-        //         height: 10
-        //         color: "red" // Set the color of the marker
+        //     delegate: Text {
+        //         text: "Latitude: " + model.latitude + ", Longitude: " + model.longitude
         //     }
         // }
 
-        // Connections {
-        //     target: mapObj
-        //     function onMySignal(latList, longList) {
-        //         for (var i = 0; i < latList.length; i++) {
-        //             // Create marker for each latitude and longitude pair
-        //             MapQuickItem {
-        //                 anchorPoint.x: 0.5
-        //                 anchorPoint.y: 0.5
-        //                 coordinate: QtPositioning.coordinate(latList[i], longList[i])
-        //                 sourceItem: Rectangle {
-        //                     width: 10
-        //                     height: 10
-        //                     color: "red"
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+        delegate: MapQuickItem {
+            anchorPoint.x: 0.5
+            anchorPoint.y: 0.5
+            coordinate: QtPositioning.coordinate(model.latitude, model.longitude)
+            sourceItem: Rectangle {
+                width: 10
+                height: 10
+                color: "red"
+            }
+        }
 
+
+        }
     }
-
 
     MouseArea {
         anchors.fill: parent
@@ -258,20 +214,6 @@ Rectangle {
         }
     }
 
-    // Modern.Button {
-    //     x: 0
-    //     y: 208*2
-    //     id: botton
-    //     text:"Click to add gnode id"
-    //     onClicked: {
-    //         // Use a JavaScript function with formal parameters
-    //         console.log("button clicked at coordinates:");
-    //         systemHandler.callMe()
-    //     }
-
-    // }
-
-
     function handleButtonClickID(mouseX, mouseY) {
             // Check if the right mouse button was clicked
             if (Qt.mouseButtons === Qt.RightButton) {
@@ -288,7 +230,6 @@ Rectangle {
                 });
             }
     }
-
 
 
 }

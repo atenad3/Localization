@@ -9,7 +9,6 @@
 #include <QDebug>
 #include <stdio.h>
 
-
 // #include <QtWebEngineWidgets/QWebEngineView>
 // #include <QtWebEngineWidgets/QWebEnginePage>
 // #include <QtWebEngineWidgets/QWebEngineSettings>
@@ -61,7 +60,6 @@ void MainWindow::receiveSignal()
 {
     emitMySignal();
 }
-
 
 
 MainWindow::~MainWindow()
