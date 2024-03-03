@@ -11,7 +11,7 @@ import QtQuick.Layouts
 // import system 1.0
 
 Rectangle {
-    signal sampleSignal()
+    signal sampleSignal(string id)
     signal sampleSignal2()
     Window {
         width: 1280
@@ -105,15 +105,31 @@ Rectangle {
         MapItemView {
             model: locationModel
 
+
+            // Position the TextField above the button
+            TextField {
+                id: textField
+                anchors {
+                    horizontalCenter: botton.horizontalCenter
+                    bottom: botton.top
+                    bottomMargin: 1  // Add a margin between the TextField and the button
+                }
+                // width: button.width // Match the width of the button
+                height: implicitHeight  // Match the height of the button
+            }
+
             // coordinate: QtPositioning.coordinate(35.73661, 51.29013)
             Modern.Button {
                 x: 0
                 y: 208*2
                 id: botton
-                text:"Click to add gnode id"
+                text:"Click to add Node Id"
 
                 onClicked: {
-                    sampleSignal()
+                    var enteredText = textField.text;
+                    console.log("Entered text: " + enteredText);
+                    sampleSignal(enteredText)
+                    console.log("test");
                     // sampleSignal2()
 
                 }
@@ -197,22 +213,22 @@ Rectangle {
     }
 
 
-    Button{
-        id:buttonMap
-        text:"Click to add name"
-        onClicked: {
-            if(buttonMap.text == "Click to add name")
-            {
-                buttonMap.text = "Click to cancel name"
-                map.activeMapType = map.supportedMapTypes[3]
-            }
-            else
-            {
-                buttonMap.text = "Click to add name"
-                map.activeMapType = map.supportedMapTypes[1]
-            }
-        }
-    }
+    // Button{
+    //     id:buttonMap
+    //     text:"Click to add name"
+    //     onClicked: {
+    //         if(buttonMap.text == "Click to add name")
+    //         {
+    //             buttonMap.text = "Click to cancel name"
+    //             map.activeMapType = map.supportedMapTypes[3]
+    //         }
+    //         else
+    //         {
+    //             buttonMap.text = "Click to add name"
+    //             map.activeMapType = map.supportedMapTypes[1]
+    //         }
+    //     }
+    // }
 
     function handleButtonClickID(mouseX, mouseY) {
             // Check if the right mouse button was clicked
@@ -230,6 +246,8 @@ Rectangle {
                 });
             }
     }
+
+
 
 
 }

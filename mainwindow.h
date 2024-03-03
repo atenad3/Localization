@@ -18,11 +18,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void emitSig() { emit sample_Sig("sample signal"); }
-    void emitMySignal();
+    void emitMySignal(const QString &);
      // { emit sample_Sig2(latList); }
 
 public slots:
-    void receiveSignal();
+    void receiveSignal(const QString &);
     // void on_pushButton_clicked();
 
 

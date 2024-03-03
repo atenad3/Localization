@@ -8,6 +8,8 @@
 #include <QSqlError>
 #include <QDebug>
 #include <stdio.h>
+#include <typeinfo>
+#include <iostream>
 
 // #include <QtWebEngineWidgets/QWebEngineView>
 // #include <QtWebEngineWidgets/QWebEnginePage>
@@ -31,13 +33,11 @@ MainWindow::MainWindow(QWidget *parent)
     // connect(this, SIGNAL(setCenter(QVariant,QVariant)),obj, SLOT(setCenter(QVariant, QVariant)));
 
     // emit setCenter(35.73661,51.29013);
-    QObject::connect(obj, SIGNAL(sampleSignal()), this, SLOT(receiveSignal()), Qt::QueuedConnection);
-    // QObject::connect(obj, SIGNAL(sampleSignal2()), this, SLOT(on_pushButton_clicked()), Qt::QueuedConnection);
-
+    QObject::connect(obj, SIGNAL(sampleSignal(QString)), this, SLOT(receiveSignal(QString)), Qt::QueuedConnection);
 
 
     //connect to database
-    qDebug() << "signal received";//be jay in bayad variable ro masalan print konim.
+    // qDebug() << "signal received";//be jay in bayad variable ro masalan print konim.
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
     db.setHostName("localhost");
@@ -49,16 +49,18 @@ MainWindow::MainWindow(QWidget *parent)
     if (!db.open()) {
         qDebug() << "Failed to connect to the database:" << db.lastError().text();
     }
-
+    else {
+        qDebug() << "connected to db";
+    }
 
     ui->quickWidget->show();
     // emit setCenter(35.73661,51.29013);
 }
 
 
-void MainWindow::receiveSignal()
+void MainWindow::receiveSignal(const QString &id)
 {
-    emitMySignal();
+    emitMySignal(id);
 }
 
 
@@ -75,17 +77,19 @@ MainWindow::~MainWindow()
 
 // }
 
-void MainWindow::emitMySignal(){
+void MainWindow::emitMySignal(const QString &id){
 
 
-    QSqlQuery query;
+    // QString nodeId = "2926";
+    // QString s = QString::number(id);
+    QString nodeId = id;
+    std::cout << typeid(id).name() << std::endl;
+    QString queryStr = QString("SELECT `Latitude`, `Longitude`, `Node Id` FROM Drive_Test WHERE `Node Id` = %1").arg(nodeId);
+    QSqlQuery query(queryStr);
     // Assuming db is your QSqlDatabase object and query is your QSqlQuery object
-    if (!query.exec("SELECT `Latitude`,`Longitude` FROM Drive_Test")) {
-
+    if(!query.exec()){
         qDebug() << "Query Error:" << query.lastError().text();
-
         // return;
-
     }
 
     // emitMySignal(latList,longList);
@@ -102,6 +106,10 @@ void MainWindow::emitMySignal(){
         longList.append(lng);
         // putc(longList, stdout);
 
+        QString nodeId = query.value("Node Id").toString();
+
+        // qDebug()<< "Node Id:" << nodeId;
+
     }
     // for(int y=0; y<longList.size(); y++)
     // {
@@ -110,3 +118,4 @@ void MainWindow::emitMySignal(){
 
     emit mySignal(latList, longList);
 }
+
