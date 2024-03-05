@@ -51,6 +51,12 @@ Rectangle {
         // Zoom level can be adjusted as needed
         zoomLevel: 15 // Adjust the zoom level according to your preference
 
+        // property string latitude: "" // Define a property for latitude
+        // property string longitude: "" // Define a property for longitude
+        // var coordinate: coordinate
+
+        property var coordinate: null
+
         PinchHandler {
             id: pinch
             target: null
@@ -105,17 +111,16 @@ Rectangle {
         MapItemView {
             model: locationModel
 
-
-            // Position the TextField above the button
             TextField {
                 id: textField
+                validator: IntValidator {bottom: 1; top: 1000}
                 anchors {
                     horizontalCenter: botton.horizontalCenter
                     bottom: botton.top
-                    bottomMargin: 1  // Add a margin between the TextField and the button
+                    bottomMargin: 1
                 }
-                // width: button.width // Match the width of the button
-                height: implicitHeight  // Match the height of the button
+                // width: button.width
+                height: implicitHeight
             }
 
             // coordinate: QtPositioning.coordinate(35.73661, 51.29013)
@@ -129,7 +134,6 @@ Rectangle {
                     var enteredText = textField.text;
                     console.log("Entered text: " + enteredText);
                     sampleSignal(enteredText)
-                    console.log("test");
                     // sampleSignal2()
 
                 }
@@ -179,37 +183,173 @@ Rectangle {
             }
         }
 
+        }//mapitemview
 
+
+    // Menu {
+    //     id: menu
+    //     MenuItem {
+    //       onTriggered: {
+    //         var absolutePos = getAbsolutePosition(menu);
+    //         console.log(absolutePos.x);
+    //         // Need Mouse absolute position
+    //       }
+    //     }
+    // }
+    Menu{
+        id: contextMenu
+        MenuItem {
+            onTriggered: {
+              console.log("hello");
+              var absolutePos = getAbsolutePosition();
+              console.log(absolutePos.x);
+              text: "Longitude: "+ absolutePos.x
+              text: "Longitude: "+ absolutePos.y
+              // Need Mouse absolute position
+            }
+            // text: "Latitude: " + arg(parent.coordinate.latitude)
+            // text: "lat: %1".arg(parent.coordinate.latitude)
         }
+        // MenuItem {
+        //     text: "Longitude: "+ absolutePos.x
+        // }
+        // MenuItem {
+        //     text: "Longitude: "+ absolutePos.y
+        // }
+
     }
+
+
+
 
     MouseArea {
         anchors.fill: parent
-        acceptedButtons:  Qt.RightButton
+        acceptedButtons: Qt.RightButton
 
-        onClicked: {
-            // Use a JavaScript function with formal parameters
-            console.log("Right mouse button clicked at coordinates:");
-            handleRightButtonClick(mouseX, mouseY);
+        hoverEnabled: true
+        property var coordinate: map.toCoordinate(Qt.point(mouseX, mouseY))
+        Label
+        {
+            x: parent.mouseX - width
+            y: parent.mouseY - height - 5
+            text: "lat: %1; lon:%2".arg(parent.coordinate.latitude).arg(parent.coordinate.longitude)
         }
 
+        // property var coordinate : map.toCoordinate(Qt.point(mouseX, mouseY))
+
+
+        // var latitude = coordinate.latitude;
+        // var longitude = coordinate.longitude;
+
+        // Menu{
+        //     id: contextMenu
+        //     MenuItem {
+        //         // text: "Latitude: " + arg(parent.coordinate.latitude)
+        //         text: "lat: %1".arg(parent.coordinate.latitude)
+        //     }
+        //     MenuItem {
+        //         text: "Longitude: "+ MouseArea.coordinate.longitude
+        //     }
+
+        // }
+
+
+        onClicked: {
+            console.log("Right mouse button clicked at coordinates:");
+            var coord = map.toCoordinate(Qt.point(mouse.x, mouse.y));
+            // markermodel.append({"position_marker": coord, "type": bar.currentIndex})
+            // contextMenu.popup()
+
+            handleRightButtonClick(mouse.x, mouse.y)
+
+                     // Use latitude and longitude to position the popup
+            // console.log("lat: %1; lon:%2".arg(parent.coordinate.latitude).arg(parent.coordinate.longitude));
+        }
+
+
+
+
+        // function showPopup() {
+
+
+        //     // Create a popup menu
+
+
+        //     var menu = Menu {
+        //         MenuItem {
+        //             text: "Latitude: " + latitude + "; Longitude: " + longitude
+        //         }
+        //     };
+
+        //     // Open the popup menu at the mouse position
+        //     menu.popup(mouseX, mouseY);
+        // }
+
+
+
+
+
         function handleRightButtonClick(mouseX, mouseY) {
+
             // Check if the right mouse button was clicked
             if (Qt.mouseButtons === Qt.RightButton) {
-                // Print a sentence
-                console.log("Right mouse button clicked at coordinates:");
+                console.log("Right2 mouse button clicked at coordinates:");
 
-                // Append data to the model
-                dummyModel.append({
-                    "Latitude": map.toCoordinate(Qt.point(mouseX, mouseY)).latitude,
-                    "Longitude": map.toCoordinate(Qt.point(mouseX, mouseY)).longitude,
-                    "Label": "abc",
-                    "Color": "red",
-                    "Orientation": 3
-                });
+                var coordinate = map.toCoordinate(Qt.point(mouseX, mouseY));
+                var latitude = coordinate.latitude;
+                var longitude = coordinate.longitude;
+                console.log("Latitude:", latitude);
+                // // Append data to the model
+                // dummyModel.append({
+                //    "Latitude": latitude,
+                //    "Longitude": longitude
+                // });
+                // console.log("Latitude:", latitude);
+                // console.log("Longitude:", longitude);
+
             }
         }
 
+
+
+        function getAbsolutePosition() {
+            console.log("getAbsolutePosition");
+            var returnPos = {};
+            var coordinate = map.toCoordinate(Qt.point(mouseX, mouseY))
+            returnPos.x = coordinate.latitude;
+            returnPos.y = coordinate.longitude;
+              //   if(node !== undefined && node !== null) {
+              //      var parentValue = getAbsolutePosition(node.parent);
+              //     returnPos.x = parentValue.x + node.x;
+              //     returnPos.y = parentValue.y + node.y;
+              // }
+            return returnPos;
+        }
+
+    } //MouseArea
+
+    // function showPopup(latitude, longitude) {
+    //     // Use latitude and longitude to display the popup at the correct position
+    //     // Example: display a Google Maps InfoWindow at the specified position
+    //     var contentString = 'Latitude: ' + latitude + ', Longitude: ' + longitude;
+    //     var infowindow = new google.maps.InfoWindow({
+    //         content: contentString,
+    //         position: {lat: latitude, lng: longitude}
+    //     });
+    //     infowindow.open(map);
+    // }
+
+
+
+
+
+    }//map
+
+    PositionSource {
+        onPositionChanged: {
+            // center the map on the current position
+            map.center = position.coordinate
+        }
     }
 
 
@@ -246,8 +386,5 @@ Rectangle {
                 });
             }
     }
-
-
-
 
 }

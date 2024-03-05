@@ -11,11 +11,6 @@
 #include <typeinfo>
 #include <iostream>
 
-// #include <QtWebEngineWidgets/QWebEngineView>
-// #include <QtWebEngineWidgets/QWebEnginePage>
-// #include <QtWebEngineWidgets/QWebEngineSettings>
-
-// QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -69,13 +64,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-// void MainWindow::on_pushButton_clicked()
-// {
-
-
-//     emitMySignal();
-
-// }
 
 void MainWindow::emitMySignal(const QString &id){
 
@@ -86,13 +74,11 @@ void MainWindow::emitMySignal(const QString &id){
     std::cout << typeid(id).name() << std::endl;
     QString queryStr = QString("SELECT `Latitude`, `Longitude`, `Node Id` FROM Drive_Test WHERE `Node Id` = %1").arg(nodeId);
     QSqlQuery query(queryStr);
-    // Assuming db is your QSqlDatabase object and query is your QSqlQuery object
+
     if(!query.exec()){
         qDebug() << "Query Error:" << query.lastError().text();
-        // return;
     }
 
-    // emitMySignal(latList,longList);
 
     QVector<double> latList;
     QVector<double> longList;
@@ -111,10 +97,6 @@ void MainWindow::emitMySignal(const QString &id){
         // qDebug()<< "Node Id:" << nodeId;
 
     }
-    // for(int y=0; y<longList.size(); y++)
-    // {
-    //     qDebug()<< QString("%1").arg(longList.at(y));
-    // }
 
     emit mySignal(latList, longList);
 }
