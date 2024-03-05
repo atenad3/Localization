@@ -225,7 +225,8 @@ Rectangle {
     MouseArea {
         anchors.fill: parent
         acceptedButtons: Qt.RightButton
-
+        propagateComposedEvents: true
+        id: mouseArea
         hoverEnabled: true
         property var coordinate: map.toCoordinate(Qt.point(mouseX, mouseY))
         Label
@@ -234,6 +235,23 @@ Rectangle {
             y: parent.mouseY - height - 5
             text: "lat: %1; lon:%2".arg(parent.coordinate.latitude).arg(parent.coordinate.longitude)
         }
+
+
+
+        onClicked: (mouse)=> {
+            console.log("Right mouse button clicked at coordinates:");
+
+            var coord = map.toCoordinate(Qt.point(mouse.x, mouse.y));
+            // markermodel.append({"position_marker": coord, "type": bar.currentIndex})
+            // contextMenu.popup()
+
+            handleRightButtonClick(mouse.x, mouse.y)
+            // handleRightButtonClick(coord.latitude, coord.longitude)
+
+                     // Use latitude and longitude to position the popup
+            // console.log("lat: %1; lon:%2".arg(parent.coordinate.latitude).arg(parent.coordinate.longitude));
+        }
+
 
         // property var coordinate : map.toCoordinate(Qt.point(mouseX, mouseY))
 
@@ -254,17 +272,7 @@ Rectangle {
         // }
 
 
-        onClicked: {
-            console.log("Right mouse button clicked at coordinates:");
-            var coord = map.toCoordinate(Qt.point(mouse.x, mouse.y));
-            // markermodel.append({"position_marker": coord, "type": bar.currentIndex})
-            // contextMenu.popup()
 
-            handleRightButtonClick(mouse.x, mouse.y)
-
-                     // Use latitude and longitude to position the popup
-            // console.log("lat: %1; lon:%2".arg(parent.coordinate.latitude).arg(parent.coordinate.longitude));
-        }
 
 
 
@@ -290,24 +298,25 @@ Rectangle {
 
 
         function handleRightButtonClick(mouseX, mouseY) {
+            console.log("Right2 mouse button clicked at coordinates:");
 
             // Check if the right mouse button was clicked
-            if (Qt.mouseButtons === Qt.RightButton) {
-                console.log("Right2 mouse button clicked at coordinates:");
+            // if (Qt.mouseButtons === Qt.RightButton) {
+            console.log("Right3 mouse button clicked at coordinates:");
 
-                var coordinate = map.toCoordinate(Qt.point(mouseX, mouseY));
-                var latitude = coordinate.latitude;
-                var longitude = coordinate.longitude;
-                console.log("Latitude:", latitude);
-                // // Append data to the model
-                // dummyModel.append({
-                //    "Latitude": latitude,
-                //    "Longitude": longitude
-                // });
-                // console.log("Latitude:", latitude);
-                // console.log("Longitude:", longitude);
+            var coordinate = map.toCoordinate(Qt.point(mouseX, mouseY));
+            var latitude = coordinate.latitude;
+            var longitude = coordinate.longitude;
+            console.log("Latitude:", latitude);
+            // // Append data to the model
+            // dummyModel.append({
+            //    "Latitude": latitude,
+            //    "Longitude": longitude
+            // });
+            // console.log("Latitude:", latitude);
+            // console.log("Longitude:", longitude);
 
-            }
+
         }
 
 
