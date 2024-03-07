@@ -33,6 +33,6 @@ private:
 signals:
     void setCenter(QVariant, QVariant);
     void sample_Sig(QString);
-    void mySignal(QVector<double> ltList, QVector<double> lgList);
+    void mySignal(QVector<double> ltList, QVector<double> lgList, QVector<double> sigPList, QVector<double> sigQList, QVector<QString> sigQNameList);
 };
 #endif // MAINWINDOW_H

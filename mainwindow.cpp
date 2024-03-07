@@ -20,7 +20,11 @@ MainWindow::MainWindow(QWidget *parent)
     //establishes a communication bridge between C++ and QML.'setContextProperty' allows
     //C++ variables to be exposed to QML.
     //Here, mapObj is a variable in QML that is bound to this (the current object) in C++
+
     ui->quickWidget->engine()->rootContext()->setContextProperty("mapObj", this);
+    ui->quickWidget->engine()->rootContext()->setContextProperty("currentDateTime", QDateTime::currentDateTime());
+
+
     //This line sets the source QML file to be loaded into the QuickWidget
     ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/map.qml")));
 
@@ -72,7 +76,7 @@ void MainWindow::emitMySignal(const QString &id){
     // QString s = QString::number(id);
     QString nodeId = id;
     std::cout << typeid(id).name() << std::endl;
-    QString queryStr = QString("SELECT `Latitude`, `Longitude`, `Node Id` FROM Drive_Test WHERE `Node Id` = %1").arg(nodeId);
+    QString queryStr = QString("SELECT `Latitude`, `Longitude`, `Node Id`, `sigPowS`,`sigQualS`, `sigQualSName` FROM Drive_Test WHERE `Node Id` = %1").arg(nodeId);
     QSqlQuery query(queryStr);
 
     if(!query.exec()){
@@ -82,6 +86,9 @@ void MainWindow::emitMySignal(const QString &id){
 
     QVector<double> latList;
     QVector<double> longList;
+    QVector<double> sigPowList;
+    QVector<double> sigQualList;
+    QVector<QString> sigQualNameList;
 
     while (query.next()) {
 
@@ -94,10 +101,18 @@ void MainWindow::emitMySignal(const QString &id){
 
         QString nodeId = query.value("Node Id").toString();
 
-        // qDebug()<< "Node Id:" << nodeId;
+        double sigPow = query.value("sigPowS").toDouble();
+        sigPowList.append(sigPow);
 
+        double sigQual = query.value("sigQualS").toDouble();
+        sigQualList.append(sigQual);
+
+        QString sigQualName = query.value("sigQualSName").toString();
+        sigQualNameList.append(sigQualName);
+
+        // qDebug()<< "Node Id:" << nodeId;
     }
 
-    emit mySignal(latList, longList);
+    emit mySignal(latList, longList, sigPowList, sigQualList, sigQualNameList);
 }
 

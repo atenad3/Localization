@@ -19,6 +19,7 @@ SOURCES += \
     mainwindow.cpp \
     map.cpp \
     mymodel.cpp \
+    point.cpp \
     test.cpp
 
 HEADERS += \
@@ -27,6 +28,7 @@ HEADERS += \
     mainwindow.h \
     map.h \
     mymodel.h \
+    point.h \
     test.h
 
 FORMS += mainwindow.ui
