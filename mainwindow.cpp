@@ -59,17 +59,19 @@ MainWindow::MainWindow(QWidget *parent)
     // gridLayout = new QGridLayout(window);
     MyModel myModel;
     // ui->quickWidget->engine()->rootContext()->setContextProperty("mapObj", this);
-    ui->quickWidget->engine()->rootContext()->setContextProperty("mySQLModel", &myModel);
 
+    ui->quickWidget->engine()->rootContext()->setContextProperty("myModel", &myModel);
     // QObject::connect(obj, SIGNAL(sampleSignal(QString)), this, SLOT(receiveSignal(QString)), Qt::QueuedConnection);
+
     // to pass a pointer of it to tableView.
     tableView.setModel(&myModel);
-    ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/map.qml")));
+    // Expose myModel to QML
+    // QQmlApplicationEngine engine;
+    // engine.rootContext()->setContextProperty("myModel", &myModel);
+    // engine.load(QUrl(QStringLiteral("qrc:/Left.qml")));
+
+    ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/ui/LeftScreen/LeftScreen.qml")));
     tableView.show();
-
-
-
-
 
     ui->quickWidget->show();
     // emit setCenter(35.73661,51.29013);
