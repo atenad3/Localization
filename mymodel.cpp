@@ -5,29 +5,28 @@
 MyModel::MyModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
+    fetchData(); // Fetch data when the model is created
 }
 
 int MyModel::rowCount(const QModelIndex & /*parent*/) const
 {
-    return 20;
+    return m_data.size();
 }
 
 int MyModel::columnCount(const QModelIndex & /*parent*/) const
 {
-    return 3;
+    if (m_data.isEmpty())
+        return 0;
+    else
+        return m_data.first().size();
 }
 
 QVariant MyModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (role == Qt::DisplayRole && orientation == Qt::Horizontal) {
-        switch (section) {
-        case 0:
-            return QString("first");
-        case 1:
-            return QString("second");
-        case 2:
-            return QString("third");
-        }
+        // Fetch headers from the first row
+        if (section >= 0 && section < m_data.first().size())
+            return m_data.first().at(section);
     }
     return QVariant();
 }
@@ -35,43 +34,53 @@ QVariant MyModel::headerData(int section, Qt::Orientation orientation, int role)
 
 QVariant MyModel::data(const QModelIndex &index, int role) const
 {
-    if (role == Qt::DisplayRole)
-        return QString("Row%1, Column%2")
-            .arg(index.row() + 1)
-            .arg(index.column() +1);
+    if (!index.isValid())
+        return QVariant();
 
-    // // QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    // QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    // db.setHostName("localhost");
-    // db.setDatabaseName("test_cells");
-    // db.setUserName("atefe");
-    // db.setPassword("atefe1234");
-
-
-    // QSqlQuery query;
-    // // Assuming db is your QSqlDatabase object and query is your QSqlQuery object
-    // if (!query.exec("SELECT `Latitude`,`Longitude` FROM Drive_Test")) {
-
-    //     qDebug() << "Query Error:" << query.lastError().text();
-
-    //     // return;
-
-    // }
-
-    // QVector<double> latList;
-    // QVector<double> longList;
-
-
-    // while (query.next()) {
-
-    //     double lat = query.value("Latitude").toDouble();
-
-    //     latList.append(lat);
-    //     double lng = query.value("Longitude").toDouble();
-    //     longList.append(lng);
-
-    // }
-
+    if (role == Qt::DisplayRole) {
+        // Fetch data from the corresponding row and column
+        if (index.row() >= 0 && index.row() < m_data.size() &&
+            index.column() >= 0 && index.column() < m_data.first().size()) {
+            return m_data.at(index.row()).at(index.column());
+        }
+    }
 
     return QVariant();
+}
+
+
+void MyModel::fetchData()
+{
+    // Clear existing data
+    beginResetModel();
+    m_data.clear();
+    endResetModel();
+
+    QString queryStr = QString("SELECT `Latitude`, `Longitude`, `Node Id`, `sigPowS`,`sigQualS`, `sigQualSName` FROM Drive_Test");
+    QSqlQuery query(queryStr);
+
+    if(!query.exec()){
+        qDebug() << "Query Error:" << query.lastError().text();
+        return;
+    }
+
+    // Fetch column names
+    QStringList headers;
+    for (int i = 0; i < query.record().count(); ++i) {
+        headers << query.record().fieldName(i);
+    }
+    m_data[0].append(headers);
+
+    // Fetch data rows
+    while (query.next()) {
+        QList<QVariant> row;
+        for (int i = 0; i < query.record().count(); ++i) {
+            row.append(query.value(i));
+        }
+        m_data.append(row);
+    }
+
+    // Emit signal to notify views that the model data has changed
+    beginResetModel();
+    endResetModel();
 }

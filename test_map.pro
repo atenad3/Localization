@@ -19,7 +19,6 @@ SOURCES += \
     mainwindow.cpp \
     map.cpp \
     mymodel.cpp \
-    point.cpp \
     test.cpp
 
 HEADERS += \
@@ -28,7 +27,6 @@ HEADERS += \
     mainwindow.h \
     map.h \
     mymodel.h \
-    point.h \
     test.h
 
 FORMS += mainwindow.ui
@@ -44,3 +42,5 @@ RESOURCES += \
 
 
 QMAKE_POST_LINK += $$quote(cp -u $$[QT_INSTALL_PLUGINS]/sqldrivers/libqsqlmysql.so .)
+
+DISTFILES +=

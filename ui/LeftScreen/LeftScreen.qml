@@ -59,4 +59,33 @@ ApplicationWindow {
             }
 
     }
+
+
+    TableView {
+            id: tableView
+            anchors.fill: parent
+
+            model: mySQLModel
+            delegate: Item {
+                Row {
+                    Repeater {
+                        model: Object.keys(model)
+                        Text {
+                            text: modelData + ": " + model[modelData]
+                            width: tableView.columnWidthProvider(modelData, column)
+                            wrapMode: Text.WordWrap
+                        }
+                    }
+                }
+            }
+
+            // Populate TableView columns dynamically
+            Component.onCompleted: {
+                for (var i = 0; i < model.columnCount(); ++i) {
+                    tableView.addColumn({title: model.headerData(i, Qt.Horizontal)});
+                }
+            }
+        }
+
+
 }

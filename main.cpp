@@ -30,12 +30,6 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     System m_systemHandler;
 
-    QTableView tableView;
-    // gridLayout = new QGridLayout(window);
-    MyModel myModel;
-    // to pass a pointer of it to tableView.
-    tableView.setModel(&myModel);
-    tableView.show();
 
 
 

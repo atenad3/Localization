@@ -273,6 +273,7 @@ Rectangle {
 
                 Label {
                     text: popup.sigQN
+
                 }
 
 

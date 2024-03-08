@@ -10,6 +10,9 @@
 #include <stdio.h>
 #include <typeinfo>
 #include <iostream>
+#include "mymodel.h"
+#include <QTableView>
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -34,7 +37,6 @@ MainWindow::MainWindow(QWidget *parent)
     // emit setCenter(35.73661,51.29013);
     QObject::connect(obj, SIGNAL(sampleSignal(QString)), this, SLOT(receiveSignal(QString)), Qt::QueuedConnection);
 
-
     //connect to database
     // qDebug() << "signal received";//be jay in bayad variable ro masalan print konim.
 
@@ -51,6 +53,23 @@ MainWindow::MainWindow(QWidget *parent)
     else {
         qDebug() << "connected to db";
     }
+
+
+    QTableView tableView;
+    // gridLayout = new QGridLayout(window);
+    MyModel myModel;
+    // ui->quickWidget->engine()->rootContext()->setContextProperty("mapObj", this);
+    ui->quickWidget->engine()->rootContext()->setContextProperty("mySQLModel", &myModel);
+
+    // QObject::connect(obj, SIGNAL(sampleSignal(QString)), this, SLOT(receiveSignal(QString)), Qt::QueuedConnection);
+    // to pass a pointer of it to tableView.
+    tableView.setModel(&myModel);
+    ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/map.qml")));
+    tableView.show();
+
+
+
+
 
     ui->quickWidget->show();
     // emit setCenter(35.73661,51.29013);
