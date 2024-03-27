@@ -11,7 +11,7 @@
 #include <typeinfo>
 #include <iostream>
 // #include "mymodel.h"
-#include <QTableView>
+// #include <QTableView>
 #include <QQmlApplicationEngine>
 
 
@@ -52,37 +52,8 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
 
-    // QTableView tableView;
-    // gridLayout = new QGridLayout(window);
-
-
-
-    // MyModel myModel;
-    // to pass a pointer of it to tableView.
-    // tableView.setModel(&myModel);
-    // QQmlApplicationEngine engine1;
-    // engine1.rootContext()->setContextProperty("model", &myModel);
-
-    // ui->quickWidget->engine()->rootContext()->setContextProperty("mapObj", this);
-
-
-    // QObject::connect(obj, SIGNAL(sampleSignal(QString)), this, SLOT(receiveSignal(QString)), Qt::QueuedConnection);
-
-    // ui->quickWidget->engine()->rootContext()->setContextProperty("myModel", &myModel);
-
-
-
-    // Expose myModel to QML
-    // QQmlApplicationEngine engine;
-    // engine.rootContext()->setContextProperty("myModel", &myModel);
-    // engine.load(QUrl(QStringLiteral("qrc:/Left.qml")));
-
     ui->quickWidget->show();
-    // ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/ui/LeftScreen/LeftScreen.qml")));
-    // tableView.show();
 
-
-    // emit setCenter(35.73661,51.29013);
 }
 
 
@@ -104,7 +75,7 @@ void MainWindow::emitMySignal(const QString &id){
     // QString nodeId = "2926";
     // QString s = QString::number(id);
     QString nodeId = id;
-    std::cout << typeid(id).name() << std::endl;
+    // std::cout << typeid(id).name() << std::endl;
     QString queryStr = QString("SELECT `Latitude`, `Longitude`, `Node Id`, `sigPowS`,`sigQualS`, `sigQualSName` FROM Drive_Test WHERE `Node Id` = %1").arg(nodeId);
     QSqlQuery query(queryStr);
 
@@ -130,10 +101,17 @@ void MainWindow::emitMySignal(const QString &id){
 
         QString nodeId = query.value("Node Id").toString();
 
-        double sigPow = query.value("sigPowS").toDouble();
+        // double sigPow = query.value("sigPowS").toDouble();
+        // sigPowList.append(sigPow);
+
+        QString sigPowStr = query.value("sigPowS").toString(); // Convert to string
+        QStringList sigPowParts = sigPowStr.split("*"); // Split the string into parts
+        double sigPow = sigPowParts.isEmpty() ? 0.0 : sigPowParts.first().toDouble(); // Convert the first part to double
         sigPowList.append(sigPow);
 
-        double sigQual = query.value("sigQualS").toDouble();
+        QString sigQualStr = query.value("sigQualS").toString(); // Convert to string
+        QStringList sigQualParts = sigQualStr.split("*"); // Split the string into parts
+        double sigQual = sigQualParts.isEmpty() ? 0.0 : sigQualParts.first().toDouble(); // Convert the first part to double
         sigQualList.append(sigQual);
 
         QString sigQualName = query.value("sigQualSName").toString();
