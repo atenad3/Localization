@@ -10,9 +10,9 @@
 #include <stdio.h>
 #include <typeinfo>
 #include <iostream>
-#include "mymodel.h"
+// #include "mymodel.h"
 #include <QTableView>
-
+#include <QQmlApplicationEngine>
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -27,13 +27,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->quickWidget->engine()->rootContext()->setContextProperty("mapObj", this);
     ui->quickWidget->engine()->rootContext()->setContextProperty("currentDateTime", QDateTime::currentDateTime());
 
-
     //This line sets the source QML file to be loaded into the QuickWidget
     ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/map.qml")));
-
     auto obj = ui->quickWidget->rootObject();
     // connect(this, SIGNAL(setCenter(QVariant,QVariant)),obj, SLOT(setCenter(QVariant, QVariant)));
-
     // emit setCenter(35.73661,51.29013);
     QObject::connect(obj, SIGNAL(sampleSignal(QString)), this, SLOT(receiveSignal(QString)), Qt::QueuedConnection);
 
@@ -55,25 +52,36 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
 
-    QTableView tableView;
+    // QTableView tableView;
     // gridLayout = new QGridLayout(window);
-    MyModel myModel;
+
+
+
+    // MyModel myModel;
+    // to pass a pointer of it to tableView.
+    // tableView.setModel(&myModel);
+    // QQmlApplicationEngine engine1;
+    // engine1.rootContext()->setContextProperty("model", &myModel);
+
     // ui->quickWidget->engine()->rootContext()->setContextProperty("mapObj", this);
 
-    ui->quickWidget->engine()->rootContext()->setContextProperty("myModel", &myModel);
+
     // QObject::connect(obj, SIGNAL(sampleSignal(QString)), this, SLOT(receiveSignal(QString)), Qt::QueuedConnection);
 
-    // to pass a pointer of it to tableView.
-    tableView.setModel(&myModel);
+    // ui->quickWidget->engine()->rootContext()->setContextProperty("myModel", &myModel);
+
+
+
     // Expose myModel to QML
     // QQmlApplicationEngine engine;
     // engine.rootContext()->setContextProperty("myModel", &myModel);
     // engine.load(QUrl(QStringLiteral("qrc:/Left.qml")));
 
-    ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/ui/LeftScreen/LeftScreen.qml")));
-    tableView.show();
-
     ui->quickWidget->show();
+    // ui->quickWidget->setSource(QUrl(QStringLiteral("qrc:/ui/LeftScreen/LeftScreen.qml")));
+    // tableView.show();
+
+
     // emit setCenter(35.73661,51.29013);
 }
 

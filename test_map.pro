@@ -18,16 +18,14 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     map.cpp \
-    mymodel.cpp \
-    test.cpp
+    mymodel.cpp
 
 HEADERS += \
     Controllers/system.h \
     locationdatawrapper.h \
     mainwindow.h \
     map.h \
-    mymodel.h \
-    test.h
+    mymodel.h
 
 FORMS += mainwindow.ui
 

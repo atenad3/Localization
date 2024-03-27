@@ -28,7 +28,11 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
     QQmlApplicationEngine engine;
-    System m_systemHandler;
+    // System m_systemHandler;
+
+    MainWindow w;
+    w.show();
+    return a.exec();
 
 
 
@@ -95,13 +99,7 @@ int main(int argc, char *argv[])
     // }
 
 
-
-
-
     // Create and populate the location data wrapper
-
-
-
 
 
     // LocationDataWrapper locationDataWrapper;
@@ -114,11 +112,6 @@ int main(int argc, char *argv[])
     // // QQmlApplicationEngine engine;
     // engine.rootContext()->setContextProperty("locationData", &locationDataWrapper);
     // engine.load(QUrl(QStringLiteral("qrc:/map.qml")));
-
-
-
-
-
 
 
 
@@ -140,8 +133,6 @@ int main(int argc, char *argv[])
 
 
 
-
-
     // if (engine.rootObjects().isEmpty()){
     //     qDebug() << "no";
     //     return -1;
@@ -149,8 +140,4 @@ int main(int argc, char *argv[])
 
     // db.close();
 
-
-    MainWindow w;
-    w.show();
-    return a.exec();
 }

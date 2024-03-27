@@ -15,10 +15,14 @@ int MyModel::rowCount(const QModelIndex & /*parent*/) const
 
 int MyModel::columnCount(const QModelIndex & /*parent*/) const
 {
-    if (m_data.isEmpty())
+    if (m_data.isEmpty()){
+        qDebug() << "test1";
         return 0;
-    else
+    }
+    else{
+        qDebug() << "test2";
         return m_data.first().size();
+    }
 }
 
 QVariant MyModel::headerData(int section, Qt::Orientation orientation, int role) const

@@ -317,19 +317,57 @@ Rectangle {
 
 
         function searchValue(model, lat, lng) {
+            var minDistance = Number.POSITIVE_INFINITY;
+            var closestIndex = -1;
             for (var i = 0; i < model.count; ++i) {
                 var element = model.get(i);
-                console.log(element.latitude,element.longitude);
-                if (element.latitude === lat && element.longitude === lng) {
-                    // Found the value, do something
-                    console.log("Value found at index", i);
-                    return i; // or return the index, or the element itself, depending on your requirements
-                }
+                var distance = haversine(lat, lng, element.latitude, element.longitude);
+                if (distance < minDistance) {
+                            minDistance = distance;
+                            closestIndex = i;
+                        }
+            }   
+            
+            if (closestIndex !== -1) {
+                    console.log("Closest value found at index", closestIndex);
+                    return closestIndex;
+            } else {
+                    console.log("Value not found");
+                    return -1;
             }
-            // Value not found
-            console.log("Value not found");
-            return -1;
         }
+            
+        function toRadians(degrees) {
+            return degrees * Math.PI / 180.0;
+        }
+
+
+        function haversine(lat1, lon1, lat2, lon2) {
+            var R = 6371; // Radius of the Earth in kilometers
+            var dLat = toRadians(lat2 - lat1);
+            var dLon = toRadians(lon2 - lon1);
+            var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+                    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            var distance = R * c;
+            return distance;
+        }
+            
+            
+            
+                
+            //     console.log(element.latitude,element.longitude);
+            //     if (element.latitude === lat && element.longitude === lng) {
+            //         // Found the value, do something
+            //         console.log("Value found at index", i);
+            //         return i; // or return the index, or the element itself, depending on your requirements
+            //     }
+            // }
+            // // Value not found
+            // console.log("Value not found");
+            // return -1;
+
 
 
         function handleRightButtonClick(mouseX, mouseY, mymodel) {
@@ -337,6 +375,7 @@ Rectangle {
             var coordinate = map.toCoordinate(Qt.point(mouseX, mouseY));
             var latitude = coordinate.latitude;
             var longitude = coordinate.longitude;
+            console.log("mouse to coordinate:");
             console.log("Latitude:", latitude);
             console.log("Longitude:", longitude);
             contextMenu.popup()
@@ -348,13 +387,14 @@ Rectangle {
             var lastLongitude = mousePoints.get(lastIndex).longitude;
 
             console.log("lt is", lastLatitude)
+            console.log("lg is", lastLongitude)
             //check the ponit is one of points that we have information about it.
             if(mymodel.count > 1){
                 var found = searchValue(mymodel, lastLatitude, lastLongitude);
                 if (found>=0) {
-                    popup.sigP = mymodel.get(i).sigPow
-                    popup.sigQ = mymodel.get(i).sigQual
-                    popup.sigQN = mymodel.get(i).sigQualName
+                    popup.sigP = mymodel.get(found).sigPow
+                    popup.sigQ = mymodel.get(found).sigQual
+                    popup.sigQN = mymodel.get(found).sigQualName
                 }
                 // else {
                 // }

@@ -1,28 +1,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-// Rectangle {
-//     id: leftscreen
-//     anchors{
-//         left: parent.left
-//         right: rightScreen.left
-//         bottom: bottomBar.top
-//         top: parent.top
-//     }
-
-//     color: "orange"
-//     // Image {
-//     //     id:logo
-//     //     anchors.centerIn: parent
-//     //     width: parent.width * .75
-//     //     fillMode: Image.PreserveAspectFit
-//     //     source: "qrc:/ui/assets/marker.jpg"
-//     // }
-
-
-// }
-
-
 ApplicationWindow {
     visible: true
     width: 400
@@ -61,31 +39,31 @@ ApplicationWindow {
     }
 
 
-    TableView {
-        id: tableView
-        anchors.fill: parent
-        model: myModel
+    // TableView {
+    //     id: tableView
+    //     anchors.fill: parent
+    //     model: model
 
-        delegate: Item {
-            Row {
-                Repeater {
-                    model: Object.keys(model)
-                    Text {
-                        text: modelData + ": " + model[modelData]
-                        width: tableView.columnWidthProvider(modelData, column)
-                        wrapMode: Text.WordWrap
-                    }
-                }
-            }
-        }
+    //     delegate: Item {
+    //         Row {
+    //             Repeater {
+    //                 model: Object.keys(model)
+    //                 Text {
+    //                     text: modelData + ": " + model[modelData]
+    //                     width: tableView.columnWidthProvider(modelData, column)
+    //                     wrapMode: Text.WordWrap
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        // Populate TableView columns dynamically
-        Component.onCompleted: {
-            for (var i = 0; i < myModel.columnCount(); ++i) {
-                tableView.addColumn({title: myModel.headerData(i, Qt.Horizontal)});
-            }
-        }
-    }
+    //     // Populate TableView columns dynamically
+    //     Component.onCompleted: {
+    //         for (var i = 0; i < model.columnCount(); ++i) {
+    //             tableView.addColumn({title: myModel.headerData(i, Qt.Horizontal)});
+    //         }
+    //     }
+    // }
 
 
 }
